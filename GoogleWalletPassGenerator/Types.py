@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field, asdict, fields, is_dataclass
 from typing import List, get_args, get_origin, Iterable, Optional
 from collections.abc import Iterable
-from .enums import ReviewStatus, State, BarcodeType, BarcodeRenderEncoding
+from .enums import ReviewStatus, State, BarcodeType, BarcodeRenderEncoding, DoorsOpenLabel, MultipleDevicesAndHoldersAllowedStatus, ViewUnlockRequirement
 
 
 @dataclass
@@ -59,21 +59,102 @@ class Image(TypeCheckedDataclass):
 
 
 @dataclass
-class EventTicketClass(TypeCheckedDataclass):
-    id: EventTicketClassId
-    issuerName: str
-    eventName: LocalizedString
-    reviewStatus: ReviewStatus
-    logo: Optional[Image] = None
-
-
-@dataclass
 class Barcode(TypeCheckedDataclass):
     type: BarcodeType
     renderEncoding: BarcodeRenderEncoding
     value: str
     alternateText: Optional[str] = None
     showCodeText: Optional[LocalizedString] = None
+
+
+@dataclass
+class EventVenue(TypeCheckedDataclass):
+    name: LocalizedString
+    address: LocalizedString
+
+
+@dataclass
+class EventDateTime(TypeCheckedDataclass):
+    doorsOpen: str
+    start: str
+    end: str
+    doorsOpenLabel: Optional[DoorsOpenLabel] = None
+    customDoorsOpenLabel: Optional[LocalizedString] = None
+
+
+@dataclass
+class Uri(TypeCheckedDataclass):
+    uri: str
+    description: Optional[str] = None
+    localizedDescription: Optional[LocalizedString] = None
+    id: Optional[str] = None
+
+
+@dataclass
+class LatLongPoint(TypeCheckedDataclass):
+    latitude: float
+    longitude: float
+
+
+@dataclass
+class Review(TypeCheckedDataclass):
+    comments: str
+
+
+@dataclass
+class ImageModuleData(TypeCheckedDataclass):
+    mainImage: Image
+    id: str
+
+
+@dataclass
+class TextModuleData(TypeCheckedDataclass):
+    header: str
+    body: str
+    localizedHeader: Optional[LocalizedString] = None
+    localizedBody: Optional[LocalizedString] = None
+    id: Optional[str] = None
+
+
+@dataclass
+class LinksModuleData(TypeCheckedDataclass):
+    uris: List[Uri] = field(default_factory=list)
+
+
+@dataclass
+class CallbackOptions(TypeCheckedDataclass):
+    url: str
+    updateRequestUrl: str
+
+
+@dataclass
+class EventTicketClass(TypeCheckedDataclass):
+    id: EventTicketClassId
+    issuerName: str
+    eventName: LocalizedString
+    reviewStatus: ReviewStatus
+    logo: Optional[Image] = None
+    version: Optional[str] = None
+    venue: Optional[EventVenue] = None
+    dateTime: Optional[EventDateTime] = None
+    customSeatLabel: Optional[LocalizedString] = None
+    customRowLabel: Optional[LocalizedString] = None
+    customSectionLabel: Optional[LocalizedString] = None
+    customGateLabel: Optional[LocalizedString] = None
+    finePrint: Optional[LocalizedString] = None
+    homepageUri: Optional[Uri] = None
+    locations: List[LatLongPoint] = field(default_factory=list)
+    review: Optional[Review] = None
+    imageModuleData: List[ImageModuleData] = field(default_factory=list)
+    textModuleData: List[TextModuleData] = field(default_factory=list)
+    countryCode: Optional[str] = None
+    heroImage: Optional[Image] = None
+    hexBackgroundColor: Optional[str] = None
+    localizedIssuerName: Optional[LocalizedString] = None
+    multipleDevicesAndHoldersAllowedStatus: Optional[MultipleDevicesAndHoldersAllowedStatus] = None
+    callbackOptions: Optional[CallbackOptions] = None
+    viewUnlockRequirement: Optional[ViewUnlockRequirement] = None
+    wideLogo: Optional[Image] = None
 
 
 @dataclass
