@@ -24,8 +24,10 @@ pip install GoogleWalletPassGenerator
 Here is a basic example of how to create an EventTicket class
 
 ```python
-from GoogleWalletPassGenerator.EventTicket import EventTicketManager
-from GoogleWalletPassGenerator.Types import ReviewStatus, TranslatedString, LocalizedString, EventTicketClass, EventTicketClassId, EventTicketObject, EventTicketObjectId, State, Barcode, BarcodeType, BarcodeRenderEncoding, ObjectsToAdd, EventTicketIdentifier, serialize_to_json
+from GoogleWalletPassGenerator.eventticket import EventTicketManager
+from GoogleWalletPassGenerator.types import TranslatedString, LocalizedString, EventTicketClass, EventTicketClassId, EventTicketObject, EventTicketObjectId, Barcode, ObjectsToAddToWalet, EventTicketIdentifier
+from GoogleWalletPassGenerator.enums import ReviewStatus, State, BarcodeType, BarcodeRenderEncoding
+from GoogleWalletPassGenerator.serializer import serialize_to_json
 
 service_account_json = 'path_to_service_account_json'
 manager = EventTicketManager(service_account_json)
@@ -45,7 +47,6 @@ eventTicketClass = serialize_to_json(
             defaultValue=TranslatedString(
                 "en-US", "EVENT_NAME"
             ),
-            # Optionally add translations with translatedValues=[TranslatedString(), ...]
         ),
         reviewStatus=ReviewStatus.UNDER_REVIEW,  # Or any other status from the enum
     )
@@ -69,10 +70,9 @@ eventTicketObject = serialize_to_json(
         ),
         state=State.ACTIVE,  # Or any other state from the enum
         barcode=Barcode(
-            type=BarcodeType.QR_CODE,  # Or any other state from the enum
-            renderEncoding=BarcodeRenderEncoding.UTF_8,  # Or any other state from the enum
+            type=BarcodeType.QR_CODE,  # Or any other barcode from the enum
+            renderEncoding=BarcodeRenderEncoding.UTF_8,  # Or any other render encoding from the enum
             value="https://www.crafture.com/",
-            # Optionally add alternateText and showCodeText
         )
     )
 )

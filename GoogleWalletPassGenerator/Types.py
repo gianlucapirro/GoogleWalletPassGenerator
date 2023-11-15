@@ -1,8 +1,7 @@
 from dataclasses import dataclass, field, asdict, fields, is_dataclass
 from typing import List, get_args, get_origin, Iterable, Optional
 from collections.abc import Iterable
-from enum import Enum
-import json
+from .enums import ReviewStatus, State, BarcodeType, BarcodeRenderEncoding
 
 
 @dataclass
@@ -22,43 +21,6 @@ class TypeCheckedDataclass:
                 current_type = type(actual_value)
                 raise TypeError(
                     f'The field `{f.name}` was assigned type `{current_type.__name__}` instead of `{expected_type.__name__}`')
-
-
-class ReviewStatus(Enum):
-    REVIEW_STATUS_UNSPECIFIED = 'REVIEW_STATUS_UNSPECIFIED'
-    UNDER_REVIEW = 'UNDER_REVIEW'
-    APPROVED = 'APPROVED'
-    REJECTED = 'REJECTED'
-    DRAFT = 'DRAFT'
-
-
-class State(Enum):
-    STATE_UNSPECIFIED = 'STATE_UNSPECIFIED'
-    ACTIVE = 'ACTIVE'
-    COMPLETED = 'COMPLETED'
-    EXPIRED = 'EXPIRED'
-    INACTIVE = 'INACTIVE'
-
-
-class BarcodeType(Enum):
-    BARCODE_TYPE_UNSPECIFIED = 'BARCODE_TYPE_UNSPECIFIED'
-    AZTEC = 'AZTEC'
-    CODE_39 = 'CODE_39'
-    CODE_128 = 'CODE_128'
-    CODABAR = 'CODABAR'
-    DATA_MATRIX = 'DATA_MATRIX'
-    EAN_8 = 'EAN_8'
-    EAN_13 = 'EAN_13'
-    ITF_14 = 'ITF_14'
-    PDF_417 = 'PDF_417'
-    QR_CODE = 'QR_CODE'
-    UPC_A = 'UPC_A'
-    TEXT_ONLY = 'TEXT_ONLY'
-
-
-class BarcodeRenderEncoding(Enum):
-    RENDER_ENCODING_UNSPECIFIED = 'RENDER_ENCODING_UNSPECIFIED'
-    UTF_8 = 'UTF_8'
 
 
 @dataclass
@@ -132,23 +94,3 @@ class EventTicketIdentifier(TypeCheckedDataclass):
 class ObjectsToAddToWalet(TypeCheckedDataclass):
     eventTicketObjects: List[EventTicketIdentifier] = field(
         default_factory=list)
-
-
-def serialize_to_json(data):
-    def convert(o):
-        if isinstance(o, Enum):
-            return o.value
-        if is_dataclass(o):
-            dataclass_dict = {}
-            for field in fields(o):
-                field_value = getattr(o, field.name)
-                if (field.type == EventTicketClassId or field.type == EventTicketObjectId) and field_value is not None:
-                    dataclass_dict[field.name] = f'{field_value.issuerId}.{field_value.uniqueId}'
-                elif field_value is not None:
-                    dataclass_dict[field.name] = field_value
-            return dataclass_dict
-        if isinstance(o, dict):
-            return {k: v for k, v in o.items() if v is not None}
-        return o.__dict__
-
-    return json.loads(json.dumps(data, default=convert))
