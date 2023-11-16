@@ -198,9 +198,9 @@ class TimeInterval(TypeCheckedDataclass):
 class Message(TypeCheckedDataclass):
     header: str
     body: str
+    messageType: MessageType
     displayInterval: TimeInterval
     id: Optional[str] = None
-    messageType: MessageType
     localizedHeader: Optional[LocalizedString] = None
     localizedBody: Optional[LocalizedString] = None
 
@@ -212,17 +212,17 @@ class AppTarget(TypeCheckedDataclass):
 
 @dataclass
 class AppLinkInfo(TypeCheckedDataclass):
-    appLogoImage: Optional[Image] = None
     title: LocalizedString
     description: LocalizedString
     appTarget: AppTarget
+    appLogoImage: Optional[Image] = None
 
 
 @dataclass
 class AppLinkData(TypeCheckedDataclass):
-    androidAppLinkInfo = Optional[AppLinkInfo] = None
-    iosAppLinkInfo = Optional[AppLinkInfo] = None
-    webAppLinkInfo = Optional[AppLinkInfo] = None
+    androidAppLinkInfo: Optional[AppLinkInfo] = None
+    iosAppLinkInfo: Optional[AppLinkInfo] = None
+    webAppLinkInfo: Optional[AppLinkInfo] = None
 
 
 @dataclass
@@ -241,8 +241,8 @@ class TotpDetails(TypeCheckedDataclass):
 @dataclass
 class RotatingBarcodeValues(TypeCheckedDataclass):
     startDateTime: str
-    values: List[str] = field(default_factory=list)
     periodMillis: str
+    values: List[str] = field(default_factory=list)
 
 
 @dataclass
@@ -281,9 +281,9 @@ class EventTicketObject(TypeCheckedDataclass):
     messages: List[Message] = field(default_factory=list)
     validTimeInterval: Optional[TimeInterval] = None
     locations: List[LatLongPoint] = field(default_factory=list)
-    hasUsers: bool
-    hasLinkedDevice: bool
-    disableExpirationNotification: bool
+    hasUsers: Optional[bool] = None
+    hasLinkedDevice: Optional[bool] = None
+    disableExpirationNotification: Optional[bool] = None
     imageModuleData: List[ImageModuleData] = field(default_factory=list)
     textModuleData: List[TextModuleData] = field(default_factory=list)
     linksModuleData: Optional[LinksModuleData] = None
