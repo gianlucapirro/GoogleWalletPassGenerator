@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field, asdict, fields, is_dataclass
 from typing import List, get_args, get_origin, Iterable, Optional
 from collections.abc import Iterable
-from .enums import ReviewStatus, State, BarcodeType, BarcodeRenderEncoding, DoorsOpenLabel, MultipleDevicesAndHoldersAllowedStatus, ViewUnlockRequirement
+from .enums import ReviewStatus, State, BarcodeType, BarcodeRenderEncoding, DoorsOpenLabel, MultipleDevicesAndHoldersAllowedStatus, ViewUnlockRequirement, MessageType, TotpAlgorithm, ScreenshotEligibility, NfcConstraint
 
 
 @dataclass
@@ -147,6 +147,7 @@ class EventTicketClass(TypeCheckedDataclass):
     review: Optional[Review] = None
     imageModuleData: List[ImageModuleData] = field(default_factory=list)
     textModuleData: List[TextModuleData] = field(default_factory=list)
+    linksModuleData: Optional[LinksModuleData] = None
     countryCode: Optional[str] = None
     heroImage: Optional[Image] = None
     hexBackgroundColor: Optional[str] = None
@@ -158,11 +159,138 @@ class EventTicketClass(TypeCheckedDataclass):
 
 
 @dataclass
+class EventSeat(TypeCheckedDataclass):
+    seat: Optional[LocalizedString] = None
+    row: Optional[LocalizedString] = None
+    section: Optional[LocalizedString] = None
+    gate: Optional[LocalizedString] = None
+
+
+@dataclass
+class EventReservationInfo(TypeCheckedDataclass):
+    confirmationCode: str
+
+
+@dataclass
+class Money(TypeCheckedDataclass):
+    micros: str
+    currencyCode: str
+
+
+@dataclass
+class GroupingInfo(TypeCheckedDataclass):
+    sortIndex: int
+    groupingId: str
+
+
+@dataclass
+class DateTime(TypeCheckedDataclass):
+    date: str
+
+
+@dataclass
+class TimeInterval(TypeCheckedDataclass):
+    start: DateTime
+    end: DateTime
+
+
+@dataclass
+class Message(TypeCheckedDataclass):
+    header: str
+    body: str
+    displayInterval: TimeInterval
+    id: Optional[str] = None
+    messageType: MessageType
+    localizedHeader: Optional[LocalizedString] = None
+    localizedBody: Optional[LocalizedString] = None
+
+
+@dataclass
+class AppTarget(TypeCheckedDataclass):
+    targetUri: Uri
+
+
+@dataclass
+class AppLinkInfo(TypeCheckedDataclass):
+    appLogoImage: Optional[Image] = None
+    title: LocalizedString
+    description: LocalizedString
+    appTarget: AppTarget
+
+
+@dataclass
+class AppLinkData(TypeCheckedDataclass):
+    androidAppLinkInfo = Optional[AppLinkInfo] = None
+    iosAppLinkInfo = Optional[AppLinkInfo] = None
+    webAppLinkInfo = Optional[AppLinkInfo] = None
+
+
+@dataclass
+class TotpParameters(TypeCheckedDataclass):
+    key: str
+    valueLength: str
+
+
+@dataclass
+class TotpDetails(TypeCheckedDataclass):
+    periodMillis: str
+    algorithm: TotpAlgorithm
+    parameters: List[TotpParameters] = field(default_factory=list)
+
+
+@dataclass
+class RotatingBarcodeValues(TypeCheckedDataclass):
+    startDateTime: str
+    values: List[str] = field(default_factory=list)
+    periodMillis: str
+
+
+@dataclass
+class RotatingBarcode(TypeCheckedDataclass):
+    type: BarcodeType
+    renderEncoding: BarcodeRenderEncoding
+    valuePattern: str
+    totpDetails: TotpDetails
+    alternateText: Optional[str] = None
+    showCodeText: Optional[LocalizedString] = None
+    initialRotatingBarcodeValues = RotatingBarcodeValues
+
+
+@dataclass
+class PassConstraints(TypeCheckedDataclass):
+    screenshotEligibility: ScreenshotEligibility
+    nfcConstraint: NfcConstraint
+
+
+@dataclass
 class EventTicketObject(TypeCheckedDataclass):
     id: EventTicketObjectId
     classId: EventTicketClassId
     state: State
     barcode: Optional[Barcode] = None
+    classReference: Optional[EventTicketClass] = None
+    seatInfo: Optional[EventSeat] = None
+    reservationInfo: Optional[EventReservationInfo] = None
+    ticketHolderName: Optional[str] = None
+    ticketNumber: Optional[str] = None
+    ticketType: Optional[LocalizedString] = None
+    faceValue: Optional[Money] = None
+    groupingInfo: Optional[GroupingInfo] = None
+    linkedOfferIds: Optional[str] = None
+    hexBackgroundColor: Optional[str] = None
+    messages: List[Message] = field(default_factory=list)
+    validTimeInterval: Optional[TimeInterval] = None
+    locations: List[LatLongPoint] = field(default_factory=list)
+    hasUsers: bool
+    hasLinkedDevice: bool
+    disableExpirationNotification: bool
+    imageModuleData: List[ImageModuleData] = field(default_factory=list)
+    textModuleData: List[TextModuleData] = field(default_factory=list)
+    linksModuleData: Optional[LinksModuleData] = None
+    appLinkData: Optional[AppLinkData] = None
+    rotatingBarcode: Optional[RotatingBarcode] = None
+    heroImage: Optional[Image] = None
+    passConstraints: Optional[PassConstraints] = None
 
 
 @dataclass
