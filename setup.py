@@ -5,7 +5,7 @@ with open('README.md', encoding='utf-8') as f:
 
 setup(
     name='GoogleWalletPassGenerator',
-    version='0.1',
+    version='1.0.1',
     license='MIT',
     packages=find_packages(),
     install_requires=[
