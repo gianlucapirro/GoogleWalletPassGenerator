@@ -20,5 +20,5 @@ setup(
     long_description=long_description,
     long_description_content_type='text/markdown',
     url='https://github.com/gianlucapirro/GoogleWalletPassGenerator',
-    download_url='https://github.com/gianlucapirro/GoogleWalletPassGenerator/archive/refs/tags/v1.0.2.tar.gz'
+    download_url='https://github.com/gianlucapirro/GoogleWalletPassGenerator/archive/refs/tags/v1.0.3.tar.gz'
 )
