@@ -25,7 +25,7 @@ Here is a basic example of how to create an EventTicket class
 
 ```python
 from GoogleWalletPassGenerator.eventticket import EventTicketManager
-from GoogleWalletPassGenerator.types import TranslatedString, LocalizedString, EventTicketClass, EventTicketClassId, EventTicketObject, EventTicketObjectId, Barcode, ObjectsToAddToWalet, EventTicketIdentifier
+from GoogleWalletPassGenerator.types import TranslatedString, LocalizedString, EventTicketClass, EventTicketClassId, EventTicketObject, EventTicketObjectId, Barcode, ObjectsToAddToWallet, EventTicketIdentifier
 from GoogleWalletPassGenerator.enums import ReviewStatus, State, BarcodeType, BarcodeRenderEncoding
 from GoogleWalletPassGenerator.serializer import serialize_to_json
 
@@ -84,7 +84,7 @@ You can now create the add to Google Wallet urls:
 
 ```python
 objectsToAdd = serialize_to_json(
-    ObjectsToAddToWalet(
+    ObjectsToAddToWallet(
         [
             EventTicketIdentifier(
                 id=EventTicketObjectId(

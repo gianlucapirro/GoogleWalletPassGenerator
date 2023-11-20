@@ -300,6 +300,6 @@ class EventTicketIdentifier(TypeCheckedDataclass):
 
 
 @dataclass
-class ObjectsToAddToWalet(TypeCheckedDataclass):
+class ObjectsToAddToWallet(TypeCheckedDataclass):
     eventTicketObjects: List[EventTicketIdentifier] = field(
         default_factory=list)
