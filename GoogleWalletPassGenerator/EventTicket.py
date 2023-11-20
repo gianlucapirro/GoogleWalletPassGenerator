@@ -28,25 +28,13 @@ class EventTicketManager:
         """Create an EventTicketClass."""
         response = self.http_client.post(
             self.class_url, data=json.dumps(event_ticket_class_data))
-        if response.status_code == 200:
-            print("EventTicketClass created successfully")
-            return response.json()
-        else:
-            print(f"Failed to create EventTicketClass: {response.status_code}")
-            print(response.text)
-            return response
+        return response.json()
 
     def create_object(self, event_ticket_object_data):
         """Create an EventTicketObject."""
         response = self.http_client.post(
             self.object_url, data=json.dumps(event_ticket_object_data))
-        if response.status_code == 200:
-            print("EventTicketObject created successfully")
-            return response.json()
-        else:
-            print(f"Failed to create EventTicketClass: {response.status_code}")
-            print(response.text)
-            return response
+        return response.json()
 
     def create_add_event_ticket_urls(self, objects_to_add):
         """Create an add EventTicket to wallet link"""

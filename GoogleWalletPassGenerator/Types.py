@@ -16,7 +16,7 @@ class TypeCheckedDataclass:
                 item_type = get_args(expected_type)[0]  # Get the item type
                 if isinstance(actual_value, list) and not all(isinstance(item, item_type) for item in actual_value):
                     raise TypeError(
-                        f'Items in field `{f.name}` are not of type `{item_type.__name__}`')
+                        f'WRONG TYPE: Items in field `{f.name}` are not of type `{item_type.__name__}`')
             elif not isinstance(actual_value, expected_type) and actual_value is not None:
                 current_type = type(actual_value)
                 raise TypeError(
