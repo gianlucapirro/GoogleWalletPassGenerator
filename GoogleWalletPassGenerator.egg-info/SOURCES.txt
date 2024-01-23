@@ -1,0 +1,14 @@
+LICENSE
+README.md
+setup.cfg
+setup.py
+GoogleWalletPassGenerator/EventTicket.py
+GoogleWalletPassGenerator/Types.py
+GoogleWalletPassGenerator/__init__.py
+GoogleWalletPassGenerator/enums.py
+GoogleWalletPassGenerator/serializer.py
+GoogleWalletPassGenerator.egg-info/PKG-INFO
+GoogleWalletPassGenerator.egg-info/SOURCES.txt
+GoogleWalletPassGenerator.egg-info/dependency_links.txt
+GoogleWalletPassGenerator.egg-info/requires.txt
+GoogleWalletPassGenerator.egg-info/top_level.txt
