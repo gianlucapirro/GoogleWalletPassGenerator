@@ -75,9 +75,9 @@ class EventVenue(TypeCheckedDataclass):
 
 @dataclass
 class EventDateTime(TypeCheckedDataclass):
-    doorsOpen: str
-    start: str
-    end: str
+    doorsOpen: Optional[str] = None
+    start: Optional[str] = None
+    end: Optional[str] = None
     doorsOpenLabel: Optional[DoorsOpenLabel] = None
     customDoorsOpenLabel: Optional[LocalizedString] = None
 
