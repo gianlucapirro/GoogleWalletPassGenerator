@@ -1,3 +1,4 @@
 build/
 __pycache__/
 Google_Wallet_Pass_Generator.egg-info/
+dist/
