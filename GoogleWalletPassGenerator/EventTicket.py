@@ -52,3 +52,13 @@ class EventTicketManager:
         token = jwt.encode(signer, claims).decode('utf-8')
 
         return f'https://pay.google.com/gp/v/save/{token}'
+
+    def update_class(self, class_id: str, event_ticket_class_data: dict):
+        url = f'{self.base_url}/eventticketclass/{class_id}'
+        response = self.http_client.update(url, data=json.dumps(event_ticket_class_data))
+        return response.json()
+
+    def patch_class(self, class_id: str, event_ticket_class_data: dict):
+        url = f'{self.base_url}/eventticketclass/{class_id}'
+        response = self.http_client.update(url, data=json.dumps(event_ticket_class_data))
+        return response.json()
