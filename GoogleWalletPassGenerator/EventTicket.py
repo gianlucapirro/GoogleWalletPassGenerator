@@ -55,10 +55,10 @@ class EventTicketManager:
 
     def update_class(self, class_id: str, event_ticket_class_data: dict):
         url = f'{self.base_url}/eventticketclass/{class_id}'
-        response = self.http_client.update(url, data=json.dumps(event_ticket_class_data))
+        response = self.http_client.put(url, data=json.dumps(event_ticket_class_data))
         return response.json()
 
     def patch_class(self, class_id: str, event_ticket_class_data: dict):
         url = f'{self.base_url}/eventticketclass/{class_id}'
-        response = self.http_client.update(url, data=json.dumps(event_ticket_class_data))
+        response = self.http_client.patch(url, data=json.dumps(event_ticket_class_data))
         return response.json()
