@@ -2,6 +2,7 @@ from google.oauth2.service_account import Credentials
 from google.auth.transport.requests import AuthorizedSession
 from google.auth import jwt, crypt
 import json
+import requests
 
 
 class EventTicketManager:
@@ -53,12 +54,36 @@ class EventTicketManager:
 
         return f'https://pay.google.com/gp/v/save/{token}'
 
-    def update_class(self, class_id: str, event_ticket_class_data: dict):
-        url = f'{self.base_url}/eventticketclass/{class_id}'
-        response = self.http_client.put(url, data=json.dumps(event_ticket_class_data))
-        return response.json()
+    def patch_class(self, class_id: str, data_to_update: dict):
+        url = f'{self.base_url}/eventTicketClass/{class_id}'
+        response = self.http_client.put(
+            url, json=data_to_update)
 
-    def patch_class(self, class_id: str, event_ticket_class_data: dict):
-        url = f'{self.base_url}/eventticketclass/{class_id}'
-        response = self.http_client.patch(url, data=json.dumps(event_ticket_class_data))
-        return response.json()
+        if response.status_code == 200:
+            try:
+                return response.json()
+            except json.JSONDecodeError:
+                error_message = f"Failed to decode JSON from response. Response text {response.text}"
+                print(error_message)
+                raise
+        else:
+            error_message = f"HTTP Error {response.status_code}: {response.text}"
+            print(error_message)
+            raise requests.HTTPError(error_message)
+
+    def update_class(self, class_id: str, data_to_update: dict):
+        url = f'{self.base_url}/eventTicketClass/{class_id}'
+        response = self.http_client.put(
+            url, json=data_to_update)
+
+        if response.status_code == 200:
+            try:
+                return response.json()
+            except json.JSONDecodeError:
+                error_message = f"Failed to decode JSON from response. Response text {response.text}"
+                print(error_message)
+                raise
+        else:
+            error_message = f"HTTP Error {response.status_code}: {response.text}"
+            print(error_message)
+            raise requests.HTTPError(error_message)
