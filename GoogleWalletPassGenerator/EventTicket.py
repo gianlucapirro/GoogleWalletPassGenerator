@@ -105,6 +105,25 @@ class EventTicketManager:
                 self._extracted_from_update_object_10(response)
         else:
             self._extracted_from_update_object_14(response)
+    
+
+    def update_or_create_object(self, resource_id: str, data_to_update: dict):
+        try:
+            response = self.create_object(data_to_update)
+            if response.status_code in [200, 201]:
+                print("Object created successfully.")
+                return response.json()
+        except Exception as e:
+            print(f"Creation failed: {str(e)}")
+            if 'error' in response and response['error'].get('code') == 409:
+                print("Object already exists, attempting to update.")
+                return self.update_object(resource_id, data_to_update)
+            else:
+                raise
+
+        return None
+
+            
 
     def _extracted_from_update_object_14(self, response):
         error_message = f"HTTP Error {response.status_code}: {response.text}"
