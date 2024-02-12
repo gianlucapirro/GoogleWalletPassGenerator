@@ -23,7 +23,6 @@ class EventTicketManager:
             scopes=['https://www.googleapis.com/auth/wallet_object.issuer'])
 
         self.http_client = AuthorizedSession(self.credentials)
-        print("Succesfully created http session")
 
     def create_class(self, event_ticket_class_data):
         """Create an EventTicketClass."""
@@ -108,22 +107,20 @@ class EventTicketManager:
     
 
     def update_or_create_object(self, resource_id: str, data_to_update: dict):
-        try:
-            response = self.create_object(data_to_update)
-            if "error" in response:
-                print("Object created successfully.")
-                return response
-        except Exception as e:
-            print(f"Creation failed: {str(e)}")
-            if 'error' in response and response['error'].get('code') == 409:
-                print("Object already exists, attempting to update.")
+        response = self.create_object(data_to_update)
+
+        if 'error' in response:
+            error_code = response.get('error', {}).get('code')
+            if error_code == 409:
+                print(f"Object already exists, attempting to update: {
+                    resource_id}")
                 return self.update_object(resource_id, data_to_update)
             else:
-                raise
+                print(f"Failed to create object, error: {response['error']}")
+                return response
+        else:
+            return response
 
-        return None
-
-            
 
     def _extracted_from_update_object_14(self, response):
         error_message = f"HTTP Error {response.status_code}: {response.text}"
