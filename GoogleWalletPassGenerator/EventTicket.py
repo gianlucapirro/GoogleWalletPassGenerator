@@ -54,8 +54,8 @@ class EventTicketManager:
 
         return f'https://pay.google.com/gp/v/save/{token}'
 
-    def patch_class(self, class_id: str, data_to_update: dict):
-        url = f'{self.base_url}/eventTicketClass/{class_id}'
+    def patch_class(self, resource_id: str, data_to_update: dict):
+        url = f'{self.base_url}/eventTicketClass/{resource_id}'
         response = self.http_client.put(
             url, json=data_to_update)
 
@@ -63,16 +63,12 @@ class EventTicketManager:
             try:
                 return response.json()
             except json.JSONDecodeError:
-                error_message = f"Failed to decode JSON from response. Response text {response.text}"
-                print(error_message)
-                raise
+                self._extracted_from_update_object_10(response)
         else:
-            error_message = f"HTTP Error {response.status_code}: {response.text}"
-            print(error_message)
-            raise requests.HTTPError(error_message)
+            self._extracted_from_update_object_14(response)
 
-    def update_class(self, class_id: str, data_to_update: dict):
-        url = f'{self.base_url}/eventTicketClass/{class_id}'
+    def update_class(self, resource_id: str, data_to_update: dict):
+        url = f'{self.base_url}/eventTicketClass/{resource_id}'
         response = self.http_client.put(
             url, json=data_to_update)
 
@@ -80,10 +76,44 @@ class EventTicketManager:
             try:
                 return response.json()
             except json.JSONDecodeError:
-                error_message = f"Failed to decode JSON from response. Response text {response.text}"
-                print(error_message)
-                raise
+                self._extracted_from_update_object_10(response)
         else:
-            error_message = f"HTTP Error {response.status_code}: {response.text}"
-            print(error_message)
-            raise requests.HTTPError(error_message)
+            self._extracted_from_update_object_14(response)
+
+    def patch_object(self, resource_id: str, data_to_update: dict):
+        url = f'{self.base_url}/eventTicketObject/{resource_id}'
+        response = self.http_client.put(
+            url, json=data_to_update)
+
+        if response.status_code == 200:
+            try:
+                return response.json()
+            except json.JSONDecodeError:
+                self._extracted_from_update_object_10(response)
+        else:
+            self._extracted_from_update_object_14(response)
+
+    def update_object(self, resource_id: str, data_to_update: dict):
+        url = f'{self.base_url}/eventTicketObject/{resource_id}'
+        response = self.http_client.put(
+            url, json=data_to_update)
+
+        if response.status_code == 200:
+            try:
+                return response.json()
+            except json.JSONDecodeError:
+                self._extracted_from_update_object_10(response)
+        else:
+            self._extracted_from_update_object_14(response)
+
+    def _extracted_from_update_object_14(self, response):
+        error_message = f"HTTP Error {response.status_code}: {response.text}"
+        print(error_message)
+        raise requests.HTTPError(error_message)
+
+    def _extracted_from_update_object_10(self, response):
+        error_message = (
+            f"Failed to decode JSON from response. Response text {response.text}"
+        )
+        print(error_message)
+        raise
