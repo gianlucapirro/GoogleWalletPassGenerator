@@ -110,9 +110,9 @@ class EventTicketManager:
     def update_or_create_object(self, resource_id: str, data_to_update: dict):
         try:
             response = self.create_object(data_to_update)
-            if response.status_code in [200, 201]:
+            if "error" in response:
                 print("Object created successfully.")
-                return response.json()
+                return response
         except Exception as e:
             print(f"Creation failed: {str(e)}")
             if 'error' in response and response['error'].get('code') == 409:
